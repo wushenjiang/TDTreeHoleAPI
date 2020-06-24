@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuge.dao.RepostDao">
+    <select id="findAll" resultType="com.liuge.domain.Repost">
+        select *,user.username from repost inner join user on repost.userid = user.userid where postid = #{postId} order by publishtime desc;
+    </select>
+    <insert id="addRepost" parameterType="com.liuge.domain.Repost">
+        insert into repost values(#{repostid},#{modifytime},#{publishtime},#{postid},#{userid},#{content});
+        update post set comments = comments +1 where postid = #{postid};
+    </insert>
+</mapper>

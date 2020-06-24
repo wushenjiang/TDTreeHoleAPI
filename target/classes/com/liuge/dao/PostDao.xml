@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuge.dao.PostDao">
+    <select id="findAll" resultType="com.liuge.domain.Post">
+        select *,user.username  from post  inner join user on post.userid = user.userid order by posttime desc ;
+    </select>
+    <select id="findByType" resultType="com.liuge.domain.Post">
+        select *,user.username  from post  inner join user on post.userid = user.userid where posttype = #{postType} order by posttime desc;
+    </select>
+    <select id="findPostById" resultType="com.liuge.domain.Post">
+        select *,user.username from post inner join user on post.userid = user.userid where postid = #{postId};
+    </select>
+    <insert id="addPost" parameterType="com.liuge.domain.Post" >
+        insert into post(postid,postcontent,modifytime,posttime,title,userid,posttype)
+        values(#{postid},#{postcontent},#{modifytime},#{posttime},#{title},#{userid},#{posttype});
+    </insert>
+    <update id="addLikes" parameterType="com.liuge.domain.Post">
+        update post set likes = #{likes} where postid = #{postid};
+    </update>
+    <update id="decreaseLikes" parameterType="com.liuge.domain.Post">
+        update post set likes = #{likes} where postid = #{postid};
+    </update>
+    <select id="findLikesByPostId" resultType="com.liuge.domain.Likes" parameterType="java.lang.Integer">
+        select * from likes where postid = #{postId};
+    </select>
+    <select id="findLikeForPost" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        select likes from post where postid = #{postId};
+    </select>
+    <insert id="insertLike" parameterType="java.lang.Integer">
+        insert into likes values(0,#{postId},#{userId});
+    </insert>
+    <delete id="deleteLike" parameterType="java.lang.Integer">
+        delete from likes where postid = #{postId} and userid = #{userId};
+    </delete>
+    <select id="findRepostForPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from repost where postid = #{postid};
+    </select>
+</mapper>
